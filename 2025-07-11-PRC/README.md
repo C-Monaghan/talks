@@ -20,4 +20,7 @@ files to correctly implement it.
 
 With that in mind, while I have continuously worked to move away from
 Office products (like PowerPoint), I decided to keep this presentation
-in its original format.
+in its [original
+format](https://github.com/C-Monaghan/talks/blob/main/2025-07-11-PRC/slides.pdf).
+
+![](title.png)
