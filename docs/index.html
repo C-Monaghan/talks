@@ -100,6 +100,62 @@ ul.task-list li input[type="checkbox"] {
       window['quarto-listing-loaded']();
     }
   })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-talks_2024 .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-title','listing-date','listing-description','listing-location','listing-links',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] }],
+      
+      searchColumns: ["listing-title","listing-date","listing-description","listing-location","listing-links"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-talks_2024'] = new List('listing-talks_2024', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-talks_2023 .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-title','listing-date','listing-description','listing-location','listing-links',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] }],
+      
+      searchColumns: ["listing-title","listing-date","listing-description","listing-location","listing-links"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-talks_2023'] = new List('listing-talks_2023', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
   </script>
 <style>
 
@@ -248,6 +304,8 @@ window.Quarto = {
    
   <ul>
   <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section">2025</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1">2024</a></li>
+  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2">2023</a></li>
   </ul>
 </nav>
     </div>
@@ -396,6 +454,94 @@ Copyright
                 <li class="talk-link">
                     
                     <a href="https://github.com/C-Monaghan/Zotero">
+                    
+                        <i class="fa-brands fa-github"></i> Github Repository
+                    </a>
+                </li>
+                
+            
+            </ul>
+        </div>
+    </div>
+    
+</div>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div>
+</section>
+<section id="section-1" class="level2">
+<h2 class="anchored" data-anchor-id="section-1">2024</h2>
+<div id="listing-talks_2024" class="quarto-listing quarto-listing-container-custom">
+
+<div class="talks">
+    
+    <div class="talk-entry">
+        <div class="metadata">          
+            <p class="date">March 20, 2024</p>
+        </div>
+        <div class="body">
+            <p class="title">The health risks of procrastination</p>
+            <p class="description">Talk presented at the Hamilton Student Seminar Series (2024) at Maynooth University | Maynooth, Ireland</p>
+
+            
+            <ul class="talk-links">
+                
+                <li class="talk-link">
+                    
+                    <a href="https://github.com/C-Monaghan/talks/blob/main/2024-03-20-student-seminar/slides.pdf">
+                    
+                        <i class="fa-solid fa-chalkboard-user"></i> Slides
+                    </a>
+                </li>
+                
+                <li class="talk-link">
+                    
+                    <a href="https://github.com/C-Monaghan/talks/tree/main/2024-03-20-student-seminar">
+                    
+                        <i class="fa-brands fa-github"></i> Github Repository
+                    </a>
+                </li>
+                
+            
+            </ul>
+        </div>
+    </div>
+    
+</div>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div>
+</section>
+<section id="section-2" class="level2">
+<h2 class="anchored" data-anchor-id="section-2">2023</h2>
+<div id="listing-talks_2023" class="quarto-listing quarto-listing-container-custom">
+
+<div class="talks">
+    
+    <div class="talk-entry">
+        <div class="metadata">          
+            <p class="date">October 24, 2023</p>
+        </div>
+        <div class="body">
+            <p class="title">Procrastination in older adults</p>
+            <p class="description">Talk presented at Research Week (2023) at Maynooth University | Maynooth, Ireland</p>
+
+            
+            <ul class="talk-links">
+                
+                <li class="talk-link">
+                    
+                    <a href="https://github.com/C-Monaghan/talks/blob/main/2023-10-24-research-week/slides.pdf">
+                    
+                        <i class="fa-solid fa-chalkboard-user"></i> Slides
+                    </a>
+                </li>
+                
+                <li class="talk-link">
+                    
+                    <a href="https://github.com/C-Monaghan/talks/tree/main/2023-10-24-research-week">
                     
                         <i class="fa-brands fa-github"></i> Github Repository
                     </a>
