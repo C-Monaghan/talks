@@ -491,5 +491,4 @@ domain_differences_a |>
 - Additionally, younger adults perceive both health and financial procrastination as more more present oriented than general procrastination.
 :::
 
-
 ## References

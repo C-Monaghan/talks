@@ -19,3 +19,5 @@
 data/
 files/
 docs/
+/.quarto/
+**/*.quarto_ipynb
