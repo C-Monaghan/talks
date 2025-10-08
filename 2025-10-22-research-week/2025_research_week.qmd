@@ -2,6 +2,8 @@
 title: "My Summer Holiday"
 ---
 
+## {transition="slide"}
+
 ```{r}
 #| label: setup
 #| warning: false
@@ -9,6 +11,12 @@ title: "My Summer Holiday"
 
 # Packages
 library(ggplot2)
+library(gghalves)
+library(ggokabeito)
+library(ggsignif)
+library(ggbeeswarm)
+
+library(dplyr)
 
 # Theme
 # Theme ------------------------------------------------------------------------
@@ -38,29 +46,29 @@ domain_differences_a    <- readRDS(here::here("data/domain_differences_a.RDS"))
 
 ![](./files/images/00a_august.jpg){fig-align="center" width="100%"}
 
----
+## {transition="slide"}
 
 ![](./files/images/00b__durham_map.png){fig-align="center" width="100%"}
 
----
+## {transition="slide"}
 
 ![](./files/images/01__durham.jpg){fig-align="center" width="100%"}
 
----
+## {transition="slide"}
 
 ![](./files/images/02__university.jpg){fig-align="center" width="100%"}
 
----
+## {transition="slide"}
 
 ![](./files/images/03__rowan_house.jpg){fig-align="center" width="100%"}
 
----
+## {transition="slide" footer=false}
 
 ::: {style="text-align:center; font-weight:bold; font-size:40px;"}
 ![Professor Fuschia Sirois](./files/images/04a__Fuschia.jpg){fig-align="center"}
 :::
 
----
+## {transition="slide" footer=false}
 
 ::: {layout-ncol=2 layout-valign="center"}
 ![](./files/images/04b__Fuschia_book.jpg){height="50%"}
@@ -68,23 +76,23 @@ domain_differences_a    <- readRDS(here::here("data/domain_differences_a.RDS"))
 ![](./files/images/04c__Fuschia_book.jpg){height="50%"}
 :::
 
----
+## {transition="slide"}
 
-:::: {#fig-projects layout-ncol=2 layout-valign="center"}
-![Sirois & Monaghan (forthcoming)](./files/images/05a__meta_analysis_paper.png)
+:::: {layout-ncol=2 layout-valign="center"}
+![](./files/images/05a__meta_analysis_paper.png)
 
-![On going project](./files/images/05b__social_norms.jpg)
-
-Completed (or semi completed) projects
+![](./files/images/05b__social_norms.jpg)
 ::::
 
----
+## {transition="slide"}
 
 <br>
 
+:::: {.fragment .semi-fade-out fragment-index=1}
 ::: {.callout-note icon="false"}
 ## Study 1: An experimental test of procrastination and social norms 
 :::
+::::
 
 <br>
 
@@ -94,9 +102,13 @@ Completed (or semi completed) projects
 
 <br>
 
+:::: {.fragment .semi-fade-out fragment-index=1}
 ::: {.callout-warning icon="false"}
 ## Study 3: An experimental test of procrastination and social norms: The role of perspective
 :::
+::::
+
+---
 
 ## Social norms
 ### What are social norms
@@ -147,11 +159,11 @@ fig_1 <- procrastination_norms |>
     geom_errorbar(
         aes(ymin = mean - se, ymax = mean + se),
         position = position_dodge(0.8), width = 0.2) +
-    ggokabeito::scale_fill_okabe_ito() +
+    scale_fill_okabe_ito() +
     # Primary axis (left) for positive words
     scale_x_continuous(
         breaks = 1:10,
-        labels = procrastination_norms |> dplyr::filter(y_position < 0) |> dplyr::pull(word) |> unique() |> (\(v) { 
+        labels = procrastination_norms |> filter(y_position < 0) |> pull(word) |> unique() |> (\(v) { 
         i1 <- which(v == "High Productivity")
         i2 <- which(v == "Strong")
         v[c(i1, i2)] <- v[c(i2, i1)]
@@ -161,7 +173,7 @@ fig_1 <- procrastination_norms |>
         sec.axis = sec_axis(
         transform  = ~.,
         breaks = 1:10,
-        labels = procrastination_norms |> dplyr::filter(y_position > 0) |> dplyr::pull(word) |> unique() |> (\(v) { 
+        labels = procrastination_norms |> filter(y_position > 0) |> pull(word) |> unique() |> (\(v) { 
             i1 <- which(v == "Low Productivity")
             i2 <- which(v == "Weak")
             v[c(i1, i2)] <- v[c(i2, i1)]
@@ -170,7 +182,7 @@ fig_1 <- procrastination_norms |>
         )) +
     labs(
         title = "Figure 1",
-        subtitle = "Mean self-evaluation scores for the productivity index and each adjective pair in the procrastination and non-procrastination condition",
+        subtitle = "Mean self-evaluation scores for the Negative Productivity Index and each adjective pair in the procrastination and non-procrastination condition",
         x = NULL, y = "Self evaluation scores (centered at 0)", 
         fill = NULL) +
     ylim(-3, 3) +
@@ -218,9 +230,28 @@ fig_1
 ### Research plan
 
 ::: {.incremental}
-- Recruited 200 participants (100 younger & 100 older adults)
-- Used [Prolific](https://www.prolific.com/) to collect data
+- Recruited 200 participants (100 younger & 100 older adults).
+- Used [Prolific](https://www.prolific.com/) to collect data.
+- Presented [**multiple**]{.alert} procrastination / non-procrastination scenarios.
+  - General procrastination
+  - Health procrastination
+  - Financial procrastination
 - Analysed data using a [**multilevel model**]{.alert}.
+:::
+
+::: {.fragment .fade-up}
+$$
+\underbrace{\mathbf{y}}_{n \times 1}
+= 
+\underbrace{\mathbf{X \quad \beta}}_{n\times p \; p \times 1} 
+\; + \;
+\underbrace{\mathbf{Z}}_{n \times N}\; \underbrace{\mathbf{u}}_{N \times 1} 
+\;+\;
+\underbrace{\mathbf{\varepsilon}}_{n \times 1}, \qquad
+\mathbf{u} \sim \mathcal{N}(\mathbf{0},\, \sigma_u^2 \; \mathbf{I}_N), \;
+\mathbf{\varepsilon} \sim \mathcal{N}(\mathbf{0},\, \sigma^2 \; \mathbf{I}_n)
+$$
+
 :::
 
 ## Age differences in social norms
@@ -249,7 +280,7 @@ fig_2 <- data |>
     geom_smooth(
         se = FALSE, 
         linewidth = 2, 
-        colour = ggokabeito::palette_okabe_ito(order = 1)) +
+        colour = palette_okabe_ito(order = 1)) +
     labs(subtitle = "Single intercept", x = "X variable", y = "Y variable") +
     theme_clean()
 
@@ -321,7 +352,7 @@ fig_3 <- data_ml |>
     ggplot(aes(x = x, y = y, colour = participant)) +
     geom_point(size = 1, alpha = 0.7) +
     geom_smooth(method = "lm", se = FALSE, linewidth = 1.2) +
-    ggokabeito::scale_color_okabe_ito() +
+    scale_color_okabe_ito() +
     labs(
         subtitle = "Multiple intercepts", 
         x = "X variable", y = "Y variable", colour = "Participant") +
@@ -336,7 +367,7 @@ patchwork::wrap_plots(fig_2, fig_3, axis_titles = "collect")
 
 This project was pre-registered on the Open Science Framework: [https://osf.io/kjybe](https://osf.io/kjybe)
 
-While we had many research questions, our primary questions were:
+While we had many research questions, our [**primary questions**]{.alert} were:
 
 ::: {.fragment}
 - Examining whether the social norms for general vs. health vs. financial procrastination differ, both within individuals, and compared to a control group.
@@ -351,15 +382,15 @@ While we had many research questions, our primary questions were:
 #| fig-align: center
 
 productivity_data |>
-  dplyr::group_by(scenario, domain, age_group) |>
-  dplyr::summarise(p_index = mean(p_index)) |>
+  group_by(scenario, domain, age_group) |>
+  summarise(p_index = mean(p_index)) |>
   ggplot(aes(x = scenario, y = p_index, fill = domain)) +
   geom_col(position = "dodge", colour = "black") +
-  ggokabeito::scale_fill_okabe_ito() +
+  scale_fill_okabe_ito() +
   labs(
     title = "Figure 2", 
-    subtitle = "Mean productivity index scores", 
-    x = NULL, y = "Productivity Index", fill = NULL) +
+    subtitle = "Mean Negative Productivity Index scores", 
+    x = NULL, y = "Negative Productivity Index", fill = NULL) +
   facet_grid(~age_group, labeller = labeller(age_group = function(x) paste0(x, " Adult"))) +
   theme_clean()
 ```
@@ -371,11 +402,11 @@ productivity_data |>
 #| fig-height: 6
 #| 
 adjective_data |>
-  dplyr::group_by(scenario, domain, age_group, adjective) |>
-  dplyr::summarise(rating = mean(rating)) |>
+  group_by(scenario, domain, age_group, adjective) |>
+  summarise(rating = mean(rating)) |>
   ggplot(aes(x = scenario, y = rating, fill = domain)) +
   geom_col(position = "dodge", colour = "black") +
-  ggokabeito::scale_fill_okabe_ito() +
+  scale_fill_okabe_ito() +
   labs(
     title = "Figure 3", subtitle = "Mean adjective rating",
     x = NULL, y = "Adjective Rating", fill = NULL) +
@@ -384,7 +415,33 @@ adjective_data |>
   theme_clean()
 ```
 
-# **Multilevel model results** {background-color="#40666e"}
+# **Multilevel model results** {background-color="#40666e" footer=false}
+
+---
+
+<br>
+
+```{r}
+#| fig-align: center
+
+productivity_data |>
+  ggplot(aes(x = scenario, y = p_index, fill = scenario, colour = scenario)) +
+  geom_half_point(transformation = position_quasirandom(width = 0.1), side = "l") +
+  geom_half_boxplot(side = "r", colour = "black") +
+  geom_signif(
+    comparisons = list(c("Non-Procrastination", "Procrastination")),
+    annotations = "β = 3.27, p < 0.001",
+    size = 0.75, textsize = 4, margin_top = 0.05,
+    tip_length = 0.04, vjust = 0.01, colour = "black") +
+  # Plot customization
+  scale_y_continuous(breaks = seq(2, 7, by = 1), expand = expansion(add = 0.75)) +
+  scale_color_okabe_ito() + scale_fill_okabe_ito() +
+  labs(
+    title = "Figure 4", subtitle = "Neagive productivity index scores by scenario", 
+    x = NULL, y = "Negative productivity index") + 
+  guides(colour = "none", fill = "none") +
+  theme_clean()
+```
 
 ---
 
@@ -394,15 +451,23 @@ adjective_data |>
 #| fig-align: center
 #| 
 productivity_data |>
-  ggplot(aes(x = age_group, y = p_index, colour = scenario, fill = scenario)) +
+  dplyr::filter(scenario == "Procrastination") |>
+  ggplot(aes(x = age_group, y = p_index, colour = age_group, fill = age_group)) +
   gghalves::geom_half_point(transformation = ggbeeswarm::position_quasirandom(width = 0.1), side = "l") +
   gghalves::geom_half_boxplot(side = "r", colour = "black") +
   ggokabeito::scale_color_okabe_ito() + ggokabeito::scale_fill_okabe_ito() +
+  ggsignif::geom_signif(
+    comparisons = list(c("Younger", "Older")),
+    annotations = "β = 0.34, p = 0.089",
+    size = 0.75, textsize = 4, margin_top = 0.1,
+    tip_length = 0.04, vjust = 0.01, colour = "black"
+  ) +
+  scale_y_continuous(breaks = seq(2, 7, by = 1), expand = expansion(add = 0.75)) +
   labs(
-    title = "Figure 4",
-    subtitle = "Age differences in productivity scores",
-    x = NULL, y = "Productivity Index") +
-  facet_wrap(~scenario) +
+    title = "Figure 5",
+    subtitle = "Age differences in negative productivity scores",
+    x = NULL, y = "Negative Productivity Index") +
+  facet_wrap(~scenario, labeller = labeller(scenario = function(x) paste0(x, " Scenario"))) +
   guides(colour = "none", fill = "none") +
   theme_clean()
 
@@ -431,10 +496,40 @@ domain_differences_p |>
     "Non-Procrastination" = "dashed", "Procrastination" = "solid"
   )) +
   labs(
-    title = "Figure 5",
+    title = "Figure 6a",
     subtitle = "Pairwise domain contrasts by scenario",
-    x = "Estimated difference in negative productivity index", y = "Domain contrast",
+    x = "Estimated difference in Negative Productivity Index", y = "Domain contrast",
     colour = NULL, linetype = NULL) +
+  theme_clean()
+```
+
+---
+
+<br>
+
+```{r}
+#| fig-align: center
+#| fig-height: 6
+
+productivity_data |>
+  group_by(scenario, domain) |>
+  summarise(p_index = mean(p_index)) |>
+  ggplot(aes(x = domain, y = p_index, colour = scenario, group = scenario)) +
+  geom_point(size = 3) +
+  geom_line(linewidth = 1) +
+  ggtext::geom_richtext(
+    aes(
+      y = case_when(
+        scenario == "Procrastination" ~ p_index - 0.5,
+        scenario == "Non-Procrastination" & domain != "Health" ~ p_index + 0.6,
+        TRUE ~ p_index + 0.5), 
+      label = sprintf("μ = %.2f", p_index)), show.legend = FALSE) +
+  scale_x_discrete(label = function(x) paste0(x, " \nProcrastination")) +
+  ggokabeito::scale_colour_okabe_ito() +
+  labs(
+    title = "Figure 6b", subtitle = "Mean Negative Productivity Index scores",
+    x = NULL, y = "Mean negative productivity index", colour = NULL) + 
+  guides(label = "none") +
   theme_clean()
 ```
 
@@ -462,7 +557,7 @@ domain_differences_a |>
   scale_linetype_manual(values = c(
     "Non-Procrastination" = "dashed", "Procrastination" = "solid")) +
   labs(
-    title = "Figure 6",
+    title = "Figure 7",
     subtitle = "Pairwise domain contrasts by scenario and age group",
     x = "Estimated difference in adjective ratings", y = "Domain contrast",
     colour = NULL, linetype = NULL) +
@@ -475,20 +570,34 @@ domain_differences_a |>
     color = "black", linewidth = 1.5))
 ```
 
-## Age differences in social norms
+## Age differences in social norms {footer=false}
 ### Conclusions
 
 ::: {.fragment}
 [**Productivity**]{.alert}
 
-- Financial procrastination is perceived as more negatively productive than general or health procrastination.
+- Health procrastination is perceived as more negatively productive than general procrastination.
+- However, financial procrastination is perceived as more negatively productive than both general or health procrastination.
 :::
 
 ::: {.fragment}
 [**Adjective Ratings**]{.alert}
 
 - Both younger and older adults perceive financial procrastination as more shameful than general procrastination.
-- Additionally, younger adults perceive both health and financial procrastination as more more present oriented than general procrastination.
+- Younger adults perceive both health and financial procrastination as more present oriented than general procrastination.
 :::
 
 ## References
+
+::: {#refs}
+:::
+
+---
+
+<br>
+
+```{r}
+#| fig-align: center
+
+fig_1
+```
