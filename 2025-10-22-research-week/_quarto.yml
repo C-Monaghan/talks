@@ -18,6 +18,10 @@ format:
     footer: |
       These slides were built with [{{< fa brands github title="GitHub octocat logo" >}}](https://c-monaghan.github.io/), [{{< fa brands r-project title="R Project" >}}](https://www.r-project.org/about.html){target="_blank"}, and [Quarto](https://quarto.org/){target="_blank"}
     self-contained: true
+revealjs-plugins:
+  - animate
+filters: 
+  - animate
     
 bibliography: ./files/references.bib
 csl: ./files/apa-sup.csl

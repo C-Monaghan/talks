@@ -2,7 +2,7 @@
 title: "My Summer Holiday"
 ---
 
-## {transition="slide"}
+## {auto-animate=true}
 
 ```{r}
 #| label: setup
@@ -46,29 +46,29 @@ domain_differences_a    <- readRDS(here::here("data/domain_differences_a.RDS"))
 
 ![](./files/images/00a_august.jpg){fig-align="center" width="100%"}
 
-## {transition="slide"}
+## {auto-animate=true}
 
 ![](./files/images/00b__durham_map.png){fig-align="center" width="100%"}
 
-## {transition="slide"}
+## {auto-animate=true}
 
 ![](./files/images/01__durham.jpg){fig-align="center" width="100%"}
 
-## {transition="slide"}
+## {auto-animate=true}
 
 ![](./files/images/02__university.jpg){fig-align="center" width="100%"}
 
-## {transition="slide"}
+## {auto-animate=true}
 
 ![](./files/images/03__rowan_house.jpg){fig-align="center" width="100%"}
 
-## {transition="slide" footer=false}
+## {auto-animate=true footer=false}
 
 ::: {style="text-align:center; font-weight:bold; font-size:40px;"}
-![Professor Fuschia Sirois](./files/images/04a__Fuschia.jpg){fig-align="center"}
+![Professor Fuschia Sirois (Durham University)](./files/images/04a__Fuschia.jpg){fig-align="center"}
 :::
 
-## {transition="slide" footer=false}
+## {footer=false}
 
 ::: {layout-ncol=2 layout-valign="center"}
 ![](./files/images/04b__Fuschia_book.jpg){height="50%"}
@@ -76,7 +76,7 @@ domain_differences_a    <- readRDS(here::here("data/domain_differences_a.RDS"))
 ![](./files/images/04c__Fuschia_book.jpg){height="50%"}
 :::
 
-## {transition="slide"}
+## 
 
 :::: {layout-ncol=2 layout-valign="center"}
 ![](./files/images/05a__meta_analysis_paper.png)
@@ -84,40 +84,42 @@ domain_differences_a    <- readRDS(here::here("data/domain_differences_a.RDS"))
 ![](./files/images/05b__social_norms.jpg)
 ::::
 
-## {transition="slide"}
+##
+
+<br>
 
 <br>
 
 :::: {.fragment .semi-fade-out fragment-index=1}
-::: {.callout-note icon="false"}
+::: {.callout-tip icon="false" appearance="simple" style="background:#f7f7f7;"}
 ## Study 1: An experimental test of procrastination and social norms 
 :::
 ::::
 
 <br>
 
-::: {.callout-tip icon="false"}
+::: {.callout-tip icon="false" appearance="simple" style="background:#f7f7f7;"}
 ## Study 2: An experimental test of procrastination and social norms with young and older adults
 ::: 
 
 <br>
 
 :::: {.fragment .semi-fade-out fragment-index=1}
-::: {.callout-warning icon="false"}
+::: {.callout-tip icon="false" appearance="simple" style="background:#f7f7f7;"}
 ## Study 3: An experimental test of procrastination and social norms: The role of perspective
 :::
 ::::
 
 ---
 
-## Social norms
+## Social Norms
 ### What are social norms
 
 ::: {.incremental}
 - Shared, often [**unwritten**]{.alert} rules that guide what is seen as [**acceptable and appropriate behaviour**]{.alert} within a group or community.
 - Social norms help to maintain [**order and predictability**]{.alert} in social life.
-    - Saying "please" or "thank you."
-    - Holding the door for someone.
+    - 🗨️ Saying "please" or "thank you."
+    - 🚪 Holding the door for someone.
 - Violating social norms often provokes [**negative social reactions**]{.alert}.
 :::
 
@@ -130,7 +132,7 @@ domain_differences_a    <- readRDS(here::here("data/domain_differences_a.RDS"))
 :::
 ::::
 
-## Social norms
+## Social Norms
 ### Procrastination and social norms
 
 ::: {.incremental}
@@ -148,7 +150,7 @@ domain_differences_a    <- readRDS(here::here("data/domain_differences_a.RDS"))
 :::
 ::::
 
-## Social norms
+## Social Norms {footer=false}
 ### Procrastination and social norms
 
 ::: {.fragment}
@@ -194,7 +196,13 @@ fig_1
 
 :::
 
-## Social norms
+:::: {.fragment}
+::: {.callout-note appearance="simple"}
+Procrastination is not just a personal failure — it’s also a [**socially evaluated behaviour**]{.alert  }.
+:::
+::::
+
+## Social Norms
 ### Age differences in social norms
 
 ::: {.incremental}
@@ -212,9 +220,99 @@ Older adults might judge procrastination more negatively due to limited time hor
 :::
 ::::
 
----
+## {footer=false}
 
-![](./files/images/06__research_design.svg){fig-align="center" width="100%"}
+::: {style="display:flex; justify-content:center; align-items:center; height:100%;"}
+
+``` yaml { .animate src="./files/images/06__research_design.svg" }
+setup:
+  - element: "#cell-Choice1"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#cell-AdultYounger"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "2"
+  - element: "#cell-AdultOlder"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "2"
+  - element: "#cell-Choice2A"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "3"
+  - element: "#cell-Choice2B"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "3"
+  - element: "#cell-Group1A"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "4"
+  - element: "#cell-Group1B"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "4"
+  - element: "#cell-Group2A"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "4"
+  - element: "#cell-Group2B"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "4"
+  - element: "#cell-Choice3A"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "5"
+  - element: "#cell-Choice3B"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "5"
+  - element: "#cell-Choice3C"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "5"
+  - element: "#cell-Choice3D"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "5"
+  - element: "#cell-P1"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "6"
+  - element: "#cell-NP1"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "6"
+  - element: "#cell-P2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "6"
+  - element: "#cell-NP2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "6"
+```
+:::
 
 ---
 
@@ -437,7 +535,7 @@ productivity_data |>
   scale_y_continuous(breaks = seq(2, 7, by = 1), expand = expansion(add = 0.75)) +
   scale_color_okabe_ito() + scale_fill_okabe_ito() +
   labs(
-    title = "Figure 4", subtitle = "Neagive productivity index scores by scenario", 
+    title = "Figure 4", subtitle = "Negative productivity index scores by scenario", 
     x = NULL, y = "Negative productivity index") + 
   guides(colour = "none", fill = "none") +
   theme_clean()
