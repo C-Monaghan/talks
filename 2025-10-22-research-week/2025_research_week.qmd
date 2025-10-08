@@ -339,13 +339,13 @@ fig_1
 
 ::: {.fragment .fade-up}
 $$
-\underbrace{\mathbf{y}}_{n \times 1}
+\mathbf{y}
 = 
-\underbrace{\mathbf{X \quad \beta}}_{n\times p \; p \times 1} 
+\underbrace{\mathbf{X \; \beta}}_{\text{Fixed}} 
 \; + \;
-\underbrace{\mathbf{Z}}_{n \times N}\; \underbrace{\mathbf{u}}_{N \times 1} 
+\underbrace{\mathbf{Z \; u}}_{\text{Random}}
 \;+\;
-\underbrace{\mathbf{\varepsilon}}_{n \times 1}, \qquad
+\mathbf{\varepsilon}, \qquad
 \mathbf{u} \sim \mathcal{N}(\mathbf{0},\, \sigma_u^2 \; \mathbf{I}_N), \;
 \mathbf{\varepsilon} \sim \mathcal{N}(\mathbf{0},\, \sigma^2 \; \mathbf{I}_n)
 $$
@@ -385,6 +385,12 @@ fig_2 <- data |>
 fig_2
 ```
 
+::: {.notes}
+- When analysing psychological data, we often have **multiple observations nested within individuals** — for example, repeated ratings or responses. 
+- A standard regression model assumes that every observation comes from the same population and can therefore be described by one common intercept and slope.
+- It works well when observations are independent, but it ignores the fact that responses from the same person are usually more similar to each other than to those from different people.
+:::
+
 ---
 
 ## Age differences in social norms
@@ -412,6 +418,10 @@ $$
 y_{ij} = \gamma_{00} + \beta_{1}x_{ij} + \mu_{0j} + \epsilon_{ij}
 $$
 
+:::
+
+::: {notes}
+- A multilevel model **relaxes this assumption** by allowing certain parameters — typically the intercepts or slopes — to vary across groups, such as participants.
 :::
 
 ---
