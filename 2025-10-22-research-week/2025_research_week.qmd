@@ -120,15 +120,18 @@ domain_differences_a    <- readRDS(here::here("data/domain_differences_a.RDS"))
 - Social norms help to maintain [**order and predictability**]{.alert} in social life.
     - 🗨️ Saying "please" or "thank you."
     - 🚪 Holding the door for someone.
-- Violating social norms often provokes [**negative social reactions**]{.alert}.
+- Violating social norms often provokes [**negative social reactions**]{.alert} [@van2015].
 :::
 
 :::: {.fragment}
-::: {.callout-important title="Disapproval" collapse="true"}
+::: {.callout-important icon="false" collapse="true"}
+## {{< fa thumbs-down >}} Disapproval
 :::
-::: {.callout-important title="Exclusion" collapse="true"}
+::: {.callout-important icon="false" collapse="true"}
+## {{< fa thumbs-down >}} Exclusion
 :::
-::: {.callout-important title="Embarrassment" collapse="true"}
+::: {.callout-important icon="false" collapse="true"}
+## {{< fa thumbs-down >}} Embarrassment
 :::
 ::::
 
@@ -142,13 +145,63 @@ domain_differences_a    <- readRDS(here::here("data/domain_differences_a.RDS"))
 :::
 
 :::: {.fragment}
-::: {.callout-important title="Lazy" collapse="true"}
+::: {.callout-important icon="false" collapse="true"}
+## {{< fa face-meh >}} Lazy
 :::
-::: {.callout-important title="Unreliable" collapse="true"}
+::: {.callout-important icon="false" collapse="true"}
+## {{< fa face-meh >}} Unreliable
 :::
-::: {.callout-important title="Weak" collapse="true"}
+::: {.callout-important icon="false" collapse="true"}
+## {{< fa face-meh >}} Weak
 :::
 ::::
+
+# **Study 1** {background-color="#40666e"}
+
+## {footer=false}
+
+::: {style="display:flex; justify-content:center; align-items:center; height:100%;"}
+
+``` yaml { .animate src="./files/images/06a_study_1_design.svg" }
+setup:
+  - element: "#cell-choice_1"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "1"
+  - element: "#cell-proc"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "2"
+  - element: "#cell-non_proc"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "2"
+  - element: "#cell-arrow_1"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "3"
+  - element: "#cell-arrow_2"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "3"
+  - element: "#cell-p_scenario"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "4"
+  - element: "#cell-np_scenario"
+    modifier: attr
+    parameters:
+      - class: fragment
+        data-fragment-index: "4"
+```
+
+:::
 
 ## Social Norms {footer=false}
 ### Procrastination and social norms
@@ -220,11 +273,13 @@ Older adults might judge procrastination more negatively due to limited time hor
 :::
 ::::
 
+# **Study 2** {background-color="#40666e"}
+
 ## {footer=false}
 
 ::: {style="display:flex; justify-content:center; align-items:center; height:100%;"}
 
-``` yaml { .animate src="./files/images/06__research_design.svg" }
+``` yaml { .animate src="./files/images/06b_study_2_design.svg" }
 setup:
   - element: "#cell-Choice1"
     modifier: attr
@@ -334,141 +389,9 @@ fig_1
   - General procrastination
   - Health procrastination
   - Financial procrastination
+- Participants provided ratings for several [**bipolar adjectives**]{.alert}.
 - Analysed data using a [**multilevel model**]{.alert}.
 :::
-
-::: {.fragment .fade-up}
-$$
-\mathbf{y}
-= 
-\underbrace{\mathbf{X \; \beta}}_{\text{Fixed}} 
-\; + \;
-\underbrace{\mathbf{Z \; u}}_{\text{Random}}
-\;+\;
-\mathbf{\varepsilon}, \qquad
-\mathbf{u} \sim \mathcal{N}(\mathbf{0},\, \sigma_u^2 \; \mathbf{I}_N), \;
-\mathbf{\varepsilon} \sim \mathcal{N}(\mathbf{0},\, \sigma^2 \; \mathbf{I}_n)
-$$
-
-:::
-
-## Age differences in social norms
-### Multilevel models
-
-A standard regression model typically assumes one common intercept and slope for every observation
-
-$$ 
-y_i = \beta_0 + \beta_1x_i + \epsilon_i \qquad \epsilon_i \sim N(0, \sigma^2_e)
-$$
-
-
-```{r}
-#| fig-align: center
-#| 
-set.seed(123)
-
-x <- rnorm(n = 100, mean = 2, sd = 3)
-y <- 3 + x + runif(n = 100, min = 0, max = 0.5)
-
-data <- tibble::tibble(y = y, x = x)
-
-fig_2 <- data |>
-    ggplot(aes(x = x, y = y)) +
-    geom_point(size = 0.5) +
-    geom_smooth(
-        se = FALSE, 
-        linewidth = 2, 
-        colour = palette_okabe_ito(order = 1)) +
-    labs(subtitle = "Single intercept", x = "X variable", y = "Y variable") +
-    theme_clean()
-
-fig_2
-```
-
-::: {.notes}
-- When analysing psychological data, we often have **multiple observations nested within individuals** — for example, repeated ratings or responses. 
-- A standard regression model assumes that every observation comes from the same population and can therefore be described by one common intercept and slope.
-- It works well when observations are independent, but it ignores the fact that responses from the same person are usually more similar to each other than to those from different people.
-:::
-
----
-
-## Age differences in social norms
-### Multilevel models
-
-Allow the intercept to vary across groups (e.g. participants). Index responses by $i$ (response) and  $j$ (participant):
-
-$$
-y_{ij} = \beta_{0j} + \beta_{1}x_{ij} + \epsilon_{ij} \qquad \epsilon \sim N(0, \sigma^2_e)
-$$
-
-::: {.fragment}
-Model the varying intercept as:
-
-$$
-\beta_{0j} = \gamma_{00} + \mu_{0j} \qquad \mu_{0j} \sim N(0, \tau_{00})
-$$
-
-:::
-
-::: {.fragment}
-Substituting everything back in:
-
-$$
-y_{ij} = \gamma_{00} + \beta_{1}x_{ij} + \mu_{0j} + \epsilon_{ij}
-$$
-
-:::
-
-::: {notes}
-- A multilevel model **relaxes this assumption** by allowing certain parameters — typically the intercepts or slopes — to vary across groups, such as participants.
-:::
-
----
-
-<br>
-
-```{r}
-#| fig-align: center
-#| fig-width: 10
-
-set.seed(123)
-
-# Simulate data for 6 participants (j), each with 20 observations (i)
-n_participants <- 6
-n_obs          <- 20
-
-participants <- factor(rep(1:n_participants, each = n_obs))
-
-# Random intercepts per participant (normally distributed around 3)
-intercepts <- rnorm(n_participants, mean = 3, sd = 1)
-
-# Fixed slope (shared across participants)
-slope <- 1.2
-
-# Predictor and outcome
-x <- rnorm(n_participants * n_obs, mean = 2, sd = 2)
-y <- intercepts[participants] + slope * x + rnorm(length(x), 0, 0.5)
-
-data_ml <- tibble::tibble(
-  participant = participants,
-  x = x,
-  y = y
-)
-
-fig_3 <- data_ml |>
-    ggplot(aes(x = x, y = y, colour = participant)) +
-    geom_point(size = 1, alpha = 0.7) +
-    geom_smooth(method = "lm", se = FALSE, linewidth = 1.2) +
-    scale_color_okabe_ito() +
-    labs(
-        subtitle = "Multiple intercepts", 
-        x = "X variable", y = "Y variable", colour = "Participant") +
-    guides(colour = "none") +
-    theme_clean()
-
-patchwork::wrap_plots(fig_2, fig_3, axis_titles = "collect")
-```
 
 ## Age differences in social norms
 ### Research questions
@@ -481,6 +404,8 @@ While we had many research questions, our [**primary questions**]{.alert} were:
 - Examining whether the social norms for general vs. health vs. financial procrastination differ, both within individuals, and compared to a control group.
 - Examining whether negative social norms associated with procrastination differ between age cohorts (younger vs older adults).
 :::
+
+![](./files/images/07_OSF.png){.editable}
 
 ---
 
@@ -589,6 +514,7 @@ productivity_data |>
 #| fig-align: center
 #| 
 domain_differences_p |>
+  mutate(across(c(estimate, ci_lower, ci_upper), ~ .x * -1)) |>
     ggplot(aes(
         x = estimate, y = contrast, colour = highlight, 
         linetype = scenario, group = scenario)) +
@@ -648,9 +574,10 @@ productivity_data |>
 ```{r}
 #| fig-align: center
 #| fig-width: 10
-#| fig-height: 6
+#| fig-height: 7
 #| 
 domain_differences_a |>
+  mutate(across(c(estimate, ci_lower, ci_upper), ~ .x * -1)) |>
   ggplot(aes(
     x = estimate, y = contrast, colour = highlight, 
     linetype = scenario, group = scenario)) +
@@ -695,6 +622,17 @@ domain_differences_a |>
 - Younger adults perceive both health and financial procrastination as more present oriented than general procrastination.
 :::
 
+## Age differences in social norms {footer=false}
+### Conclusions
+
+<br>
+
+<br>
+
+::: {style="text-align:center;"}
+Procrastination may be seen as a [**universally negative social behaviour**]{.alert}, irrespective of age.
+:::
+
 ## References
 
 ::: {#refs}
@@ -709,3 +647,7 @@ domain_differences_a |>
 
 fig_1
 ```
+
+::: {.callout-note appearance="simple"}
+Procrastination is not just a personal failure — it’s also a [**socially evaluated behaviour**]{.alert  }.
+:::

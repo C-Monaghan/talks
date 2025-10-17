@@ -1,5 +1,5 @@
 project:
-  output-dir: docs
+  output-dir: ../docs
   
   preview: 
     port: 6532
@@ -20,8 +20,10 @@ format:
     self-contained: true
 revealjs-plugins:
   - animate
+  - editable
 filters: 
   - animate
+  - editable
     
 bibliography: ./files/references.bib
 csl: ./files/apa-sup.csl

@@ -16,3 +16,5 @@ contributes:
       include-before-body: 
         - text: |
             <script src="_extensions/clean/mathjax-config.js"></script>
+      format-resources:
+        - mathjax-config.js
