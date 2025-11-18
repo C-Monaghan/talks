@@ -1,0 +1,400 @@
+---
+title: Goodness of fit diagnostics for Markov Models
+subtitle: A set of simulation studies
+editor:
+    markdown:
+      wrap: 80
+---
+
+```{r}
+#| label: set-up
+
+# Packages ---------------------------------------------------------------------
+library(ggplot2)
+library(ggokabeito)
+
+# Theme ------------------------------------------------------------------------
+theme_pres <- function() {
+    theme_minimal(base_size = 16) +
+        theme(
+            panel.grid.minor = element_blank(),
+            axis.title = element_text(size = rel(1), face = "bold"),
+            axis.text = element_text(size = rel(1))
+            )
+            }
+```
+
+## Goodness of fit diagnostics for Markov Models
+
+### Plan for today
+
+::: incremental
+-   Introduction to Markov Models
+-   Goodness of fit
+    -   Why they are difficult for Markov Models
+-   Our simulation study
+-   Current / Future work
+:::
+
+# **Markov Models** {background-color="#40666e" footer="false"}
+
+## Markov Models
+
+### What are they
+
+A Markov model is a statistical tool used to model [systems that change over time]{.alert}
+and where the [future depends only on the present]{.alert}.
+
+::: fragment
+Common examples include:
+
+- Weather transitions
+- Movement or behavioural states
+- Progression of cognitive decline
+  - [This is where my work is focused]{.alert}
+:::
+
+## Markov Models
+
+### What are they
+
+::: incremental
+-   The model hinges on the [Markov property]{.alert}:
+    -   Let $X_t$ denote an arbitrary state at time $t$, where
+        $X_t \in S = \{1, 2, \dots, K\}$.
+    -   Transition to state $j$ at $t + 1$ depends [only]{.alert} on state $i$
+        at $t$.
+:::
+
+:::: {.fragment .fade-up}
+::: {.callout-note icon="false"}
+## Markov property
+
+$$
+P(X_{t+1} = j \; \vert \; X_t = i, X_{t-1} = i_{t-1}, \dots X_0 = i_0) = P(X_{t+1} = j \; \vert \; X_t = i)
+$$
+
+:::
+::::
+
+# **Goodness of fit** {background-color="#40666e" footer="false"}
+
+## Goodness of fit {footer="false"}
+
+### Residual analysis
+
+In ordinary regression settings, residuals measure the difference between what
+the model predicts and what we observe.
+
+They are central for diagnosing:
+
+::: incremental
+-   Misfit
+-   Non-linearity
+-   Outliers
+:::
+
+:::: {.fragment .fade-up}
+::: {.callout-important collapse="true"}
+## Residuals typically rely on a clear [“predicted value”]{.alert} for each observation.
+:::
+::::
+
+## Goodness of fit {footer="false"}
+
+### Residual analysis
+
+```{r}
+#| label: fig-1
+#| fig-cap: "Observed data"
+
+set.seed(432)
+
+# Hours of study per week (our x variable)
+study_hours <- rnorm(10, mean = 7, sd = 2)
+
+# Exam scores (our y variable)
+exam_scores <- 25 + 5 * study_hours + rnorm(10, mean = 0, sd = 2)
+
+test_data <- data.frame(study_hours = ceiling(study_hours), exam_scores = ceiling(exam_scores))
+
+# Plotting ---------------------------------------------------------------------
+fig_1 <- test_data |>
+    ggplot(aes(x = study_hours, y = exam_scores)) +
+    geom_point(size = 4) +
+    labs(x = "Number of hours studied", y = "Exam score") +
+    theme_pres()
+
+fig_1
+```
+
+## Goodness of fit {footer="false"}
+
+### Residual analysis
+
+```{r}
+#| label: fig-2
+#| fig-cap: "Observed data with fitted model"
+
+# Adding regression line
+fig_2 <- fig_1 +
+    geom_smooth(formula = y ~ x, method = "lm", se = FALSE, colour = palette_okabe_ito(5))
+
+fig_2
+```
+
+## Goodness of fit {footer="false"}
+
+### Residual analysis
+
+```{r}
+#| label: fig-3
+#| fig-cap: "Observed data, fitted model, and predicted values"
+
+# Fitting model
+fit <- glm(exam_scores ~ study_hours, data = test_data)
+
+# Getting predicted values
+predicted_vals <- test_data |>
+    dplyr::mutate(preds = coef(fit)[1] + coef(fit)[2] * study_hours)
+
+# Adding predicted values to plot
+fig_3 <- fig_2 +
+    geom_point(
+        data = predicted_vals,
+        aes(x = study_hours, y = preds),
+        size = 3.5,
+        colour = palette_okabe_ito(4)
+        )
+
+fig_3
+```
+
+## Goodness of fit {footer="false"}
+
+### Residual analysis
+
+```{r}
+#| label: fig-4
+#| fig-cap: "Residuals: distance between observed and fitted values"
+
+fig_4 <- fig_3 +
+    geom_segment(
+        data = predicted_vals,
+        aes(x = study_hours, xend = study_hours,
+            y = exam_scores,  yend = preds),
+        colour = ggokabeito::palette_okabe_ito(2),
+        linewidth = 1.5, linetype = "dashed", alpha = 0.5
+        )
+
+fig_4
+```
+
+## Goodness of fit {footer="false"}
+
+### What about Markov Models
+
+Markov Models dont deal with predicted values, but rather [probabilities]{.alert}.
+
+::: fragment
+$$
+P = \begin{bmatrix}
+P(A \rightarrow A) \quad P(A \rightarrow B) \\
+P(B \rightarrow A) \quad P(B \rightarrow B)
+\end{bmatrix} =
+\begin{bmatrix}
+0.6 \quad 0.4 \\
+0.7 \quad 0.3
+\end{bmatrix}
+$$
+:::
+
+::: fragment
+For state **A**, the model predicts a probability vector:
+
+$$
+P(X_{t+1} \; \vert \; X_t = A) = (0.6, 0.4)
+$$
+
+But in reality we observe [one transition]{.alert}:
+$A \rightarrow A \quad A \rightarrow B$
+
+A residual like $y - \hat{y}$ no longer make any mathematical sense.
+:::
+
+# **Simulation Study** {background-color="#40666e" footer=false}
+
+## Simulation Study
+
+### Transition matrices
+
+```{r}
+
+transitions <- tibble::tribble(
+  ~from , ~to , ~obs , ~pred ,
+  "A"   , "A" , 0.83 , 0.60  ,
+  "A"   , "B" , 0.17 , 0.40  ,
+  "B"   , "A" , 0.33 , 0.70  ,
+  "B"   , "B" , 0.66 , 0.30
+)
+
+transitions |>
+  tidyr::pivot_longer(
+    cols = c(obs:pred),
+    names_to = "transition",
+    values_to = "value"
+  ) |>
+  ggplot(aes(x = to, y = from, fill = value)) +
+  geom_tile(colour = "white", linewidth = 0.5) +
+  geom_text(
+    aes(label = value),
+    size = 4.5,
+    color = "#212427",
+    fontface = "bold"
+  ) +
+  colorspace::scale_fill_continuous_diverging(
+    palette = "Blue-Red 3",
+    mid = 0.50,
+    alpha = 0.5,
+    limits = c(0, 1),
+    name = "Transition \nProbability"
+  ) +
+  labs(x = "To", y = "From") +
+  facet_wrap(~transition, labeller = labeller(transition = c(
+    "obs" = "Observed Transitions", "pred" = "Predicted Transitions"
+  ))) +
+  theme_pres() +
+  theme(
+    panel.grid = element_blank(),
+    strip.text = element_text(size = rel(0.8), face = "bold"),
+    legend.position = "none")
+```
+
+## Simulation Study
+
+### Simulation design
+
+::: incremental
+- Simulated $N = 10{,}000$ individuals across $t = 3$ waves.
+- For each subject $i$, time-invariant and initial time-varying covariates $(x_1 \dots x_5)$ were generated to [mimic empirical datasets]{.alert}.
+- $y_{it}$ is a categorical state for individual $i$ at wave $t$, with three possible states $(1, 2, 3)$.
+- Additionally, $y_{it}$ followed [3 different scenarios]{.alert}.
+:::
+
+## Simulation Study
+
+### Simulation design
+
+- [Base models]{.alert} $\rightarrow$ treats all observations independently.
+    - $y \sim x_1 +x_2 + x_3$
+- [Additive models]{.alert} $\rightarrow$ includes previous state additively.
+    - $y \sim x_1 +x_2 + x_3 + y_{t-1}$
+- [Multiplicative models]{.alert} $\rightarrow$ includes previous state multiplicatively.
+    - $y \sim (x_1 +x_2 + x_3) \times t_{t-1}$
+
+## Simulation Study {footer=false}
+
+### Simulation design
+
+```{r}
+#| label: fig-model-equations
+#| fig-cap: "Simulation equations"
+#| fig-align: center
+
+knitr::include_graphics(path = here::here("files/images/model_equations.png"), dpi = 800)
+```
+
+## Simulation Study {footer=false}
+
+### Simulation design
+
+From each fitted model we compute an individual-specific predicted transition matrix:
+
+<br>
+
+::: fragment
+\begin{equation}
+\hat{P} =
+\begin{bmatrix}
+P(y_t=1 | y_{t-1}=1) & P(y_t=2 | y_{t-1}=1) & P(y_t=3 | y_{t-1}=1) \\
+P(y_t=1 | y_{t-1}=2) & P(y_t=2 | y_{t-1}=2) & P(y_t=3 | y_{t-1}=2) \\
+P(y_t=1 | y_{t-1}=3) & P(y_t=2 | y_{t-1}=3) & P(y_t=3 | y_{t-1}=3) \\
+\end{bmatrix}
+\end{equation}
+:::
+
+<br>
+
+:::: fragment
+::: {.callout-important icon="false" collapse="true"}
+## We then compare $P$ and $\hat{P}$ via several **distance metrics**.
+:::
+::::
+
+## Simulation Study {footer=false}
+
+### Distance metrics
+
+- **Frobenius Norm**
+  $\rightarrow ||\mathbf{D}||_F = \sqrt{\sum_{j=1}^{n}\sum_{k=1}^{n} d_{j,k}^2}$
+
+- **Manhattan Distance**
+  $\rightarrow ||\mathbf{d}||_1 = \sum_{i=1}^{n} |d_i|$
+
+- **Maximum Absolute Error**
+  $\rightarrow \max(|d_i|)$
+
+- **Mean Absolute Error**
+  $\rightarrow \frac{1}{n} ||\mathbf{d}||$
+
+- **Root Mean Squared Error**
+  $\rightarrow \frac{1}{\sqrt{n}} ||\mathbf{D}||_F$
+
+- **Correlation Dissimilarity**
+  $\rightarrow 1 - \rho(\text{vec}(\mathbf{P}), \text{vec}(\mathbf{\hat{P}}))$
+
+::: {.callout-important icon="false"}
+## We also compare against AIC and BIC
+:::
+
+## Simulation Study {footer=false}
+
+### Results
+
+![](files/images/results.png){height=5in}
+
+## Goodness of fit diagnostics for Markov Models
+
+### Conclusions
+
+- For small sample sizes both [Manhatten Distance]{.alert} and [Mean Absolute Error]{.alert} perform equiviently, and sometimes better than standard measures as assertaining the true model.
+- For large sample sizes AIC and BIC assertain the true model almost all the time.
+
+<br>
+
+:::: fragment
+::: {.callout-tip icon="false" collapse="true"}
+## We have developed goodness of fit metrics for small sample sizes
+:::
+::::
+
+## Goodness of fit diagnostics for Markov Models
+
+### Future work
+
+- Testing different numbers of states (e.g., $y_{it} \in S = \{1 \dots 5\}$)
+- Simulating data with an [absorbing state]{.alert}
+
+<br>
+
+::: fragment
+\begin{equation}
+\hat{P} =
+\begin{bmatrix}
+P(y_t=1 | y_{t-1}=1) & P(y_t=2 | y_{t-1}=1) & P(y_t=3 | y_{t-1}=1) \\
+P(y_t=1 | y_{t-1}=2) & P(y_t=2 | y_{t-1}=2) & P(y_t=3 | y_{t-1}=2) \\
+P(y_t=1 | y_{t-1}=3) & P(y_t=2 | y_{t-1}=3) & P(y_t=3 | y_{t-1}=3) \\
+0                    & 0                    & 0
+\end{bmatrix}
+\end{equation}
+:::
