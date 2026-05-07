@@ -42,16 +42,16 @@ theme_pres <- function() {
 
 ### What are they
 
-A Markov model is a statistical tool used to model [systems that change over time]{.alert}
-and where the [future depends only on the present]{.alert}.
+A Markov model is a statistical tool used to model [systems that change over
+time]{.alert} and where the [future depends only on the present]{.alert}.
 
 ::: fragment
 Common examples include:
 
-- Weather transitions
-- Movement or behavioural states
-- Progression of cognitive decline
-  - [This is where my work is focused]{.alert}
+-   Weather transitions
+-   Movement or behavioural states
+-   Progression of cognitive decline
+    -   [This is where my work is focused]{.alert}
 :::
 
 ## Markov Models
@@ -73,7 +73,6 @@ Common examples include:
 $$
 P(X_{t+1} = j \; \vert \; X_t = i, X_{t-1} = i_{t-1}, \dots X_0 = i_0) = P(X_{t+1} = j \; \vert \; X_t = i)
 $$
-
 :::
 ::::
 
@@ -194,7 +193,8 @@ fig_4
 
 ### What about Markov Models
 
-Markov Models dont deal with predicted values, but rather [probabilities]{.alert}.
+Markov Models dont deal with predicted values, but rather
+[probabilities]{.alert}.
 
 ::: fragment
 $$
@@ -222,7 +222,7 @@ $A \rightarrow A \quad A \rightarrow B$
 A residual like $y - \hat{y}$ no longer make any mathematical sense.
 :::
 
-# **Simulation Study** {background-color="#40666e" footer=false}
+# **Simulation Study** {background-color="#40666e" footer="false"}
 
 ## Simulation Study
 
@@ -275,24 +275,27 @@ transitions |>
 ### Simulation design
 
 ::: incremental
-- Simulated $N = 10{,}000$ individuals across $t = 3$ waves.
-- For each subject $i$, time-invariant and initial time-varying covariates $(x_1 \dots x_5)$ were generated to [mimic empirical datasets]{.alert}.
-- $y_{it}$ is a categorical state for individual $i$ at wave $t$, with three possible states $(1, 2, 3)$.
-- Additionally, $y_{it}$ followed [3 different scenarios]{.alert}.
+-   Simulated $N = 10{,}000$ individuals across $t = 3$ waves.
+-   For each subject $i$, time-invariant and initial time-varying covariates
+    $(x_1 \dots x_5)$ were generated to [mimic empirical datasets]{.alert}.
+-   $y_{it}$ is a categorical state for individual $i$ at wave $t$, with three
+    possible states $(1, 2, 3)$.
+-   Additionally, $y_{it}$ followed [3 different scenarios]{.alert}.
 :::
 
 ## Simulation Study
 
 ### Simulation design
 
-- [Base models]{.alert} $\rightarrow$ treats all observations independently.
-    - $y \sim x_1 +x_2 + x_3$
-- [Additive models]{.alert} $\rightarrow$ includes previous state additively.
-    - $y \sim x_1 +x_2 + x_3 + y_{t-1}$
-- [Multiplicative models]{.alert} $\rightarrow$ includes previous state multiplicatively.
-    - $y \sim (x_1 +x_2 + x_3) \times t_{t-1}$
+-   [Base models]{.alert} $\rightarrow$ treats all observations independently.
+    -   $y \sim x_1 +x_2 + x_3$
+-   [Additive models]{.alert} $\rightarrow$ includes previous state additively.
+    -   $y \sim x_1 +x_2 + x_3 + y_{t-1}$
+-   [Multiplicative models]{.alert} $\rightarrow$ includes previous state
+    multiplicatively.
+    -   $y \sim (x_1 +x_2 + x_3) \times t_{t-1}$
 
-## Simulation Study {footer=false}
+## Simulation Study {footer="false"}
 
 ### Simulation design
 
@@ -304,11 +307,12 @@ transitions |>
 knitr::include_graphics(path = here::here("files/images/model_equations.png"), dpi = 800)
 ```
 
-## Simulation Study {footer=false}
+## Simulation Study {footer="false"}
 
 ### Simulation design
 
-From each fitted model we compute an individual-specific predicted transition matrix:
+From each fitted model we compute an individual-specific predicted transition
+matrix:
 
 <br>
 
@@ -331,44 +335,44 @@ P(y_t=1 | y_{t-1}=3) & P(y_t=2 | y_{t-1}=3) & P(y_t=3 | y_{t-1}=3) \\
 :::
 ::::
 
-## Simulation Study {footer=false}
+## Simulation Study {footer="false"}
 
 ### Distance metrics
 
-- **Frobenius Norm**
-  $\rightarrow ||\mathbf{D}||_F = \sqrt{\sum_{j=1}^{n}\sum_{k=1}^{n} d_{j,k}^2}$
+-   **Frobenius Norm**
+    $\rightarrow ||\mathbf{D}||_F = \sqrt{\sum_{j=1}^{n}\sum_{k=1}^{n} d_{j,k}^2}$
 
-- **Manhattan Distance**
-  $\rightarrow ||\mathbf{d}||_1 = \sum_{i=1}^{n} |d_i|$
+-   **Manhattan Distance** $\rightarrow ||\mathbf{d}||_1 = \sum_{i=1}^{n} |d_i|$
 
-- **Maximum Absolute Error**
-  $\rightarrow \max(|d_i|)$
+-   **Maximum Absolute Error** $\rightarrow \max(|d_i|)$
 
-- **Mean Absolute Error**
-  $\rightarrow \frac{1}{n} ||\mathbf{d}||$
+-   **Mean Absolute Error** $\rightarrow \frac{1}{n} ||\mathbf{d}||$
 
-- **Root Mean Squared Error**
-  $\rightarrow \frac{1}{\sqrt{n}} ||\mathbf{D}||_F$
+-   **Root Mean Squared Error**
+    $\rightarrow \frac{1}{\sqrt{n}} ||\mathbf{D}||_F$
 
-- **Correlation Dissimilarity**
-  $\rightarrow 1 - \rho(\text{vec}(\mathbf{P}), \text{vec}(\mathbf{\hat{P}}))$
+-   **Correlation Dissimilarity**
+    $\rightarrow 1 - \rho(\text{vec}(\mathbf{P}), \text{vec}(\mathbf{\hat{P}}))$
 
 ::: {.callout-important icon="false"}
 ## We also compare against AIC and BIC
 :::
 
-## Simulation Study {footer=false}
+## Simulation Study {footer="false"}
 
 ### Results
 
-![](files/images/results.png){height=5in}
+![](files/images/results.png){height="5in"}
 
 ## Goodness of fit diagnostics for Markov Models
 
 ### Conclusions
 
-- For small sample sizes both [Manhatten Distance]{.alert} and [Mean Absolute Error]{.alert} perform equiviently, and sometimes better than standard measures as assertaining the true model.
-- For large sample sizes AIC and BIC assertain the true model almost all the time.
+-   For small sample sizes both [Manhatten Distance]{.alert} and [Mean Absolute
+    Error]{.alert} perform equiviently, and sometimes better than standard
+    measures as assertaining the true model.
+-   For large sample sizes AIC and BIC assertain the true model almost all the
+    time.
 
 <br>
 
@@ -382,8 +386,8 @@ P(y_t=1 | y_{t-1}=3) & P(y_t=2 | y_{t-1}=3) & P(y_t=3 | y_{t-1}=3) \\
 
 ### Future work
 
-- Testing different numbers of states (e.g., $y_{it} \in S = \{1 \dots 5\}$)
-- Simulating data with an [absorbing state]{.alert}
+-   Testing different numbers of states (e.g., $y_{it} \in S = \{1 \dots 5\}$)
+-   Simulating data with an [absorbing state]{.alert}
 
 <br>
 
