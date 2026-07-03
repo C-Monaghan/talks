@@ -11,7 +11,7 @@ contributes:
       theme: comic.scss
       filters:
         - comic.lua
-      logo: comic.svg
+      # logo: comic.svg
       slide-number: c
       transition: slide
       transition-speed: default
