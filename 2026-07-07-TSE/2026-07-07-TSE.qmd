@@ -1,0 +1,414 @@
+---
+title: Markov Man
+subtitle: "Issue 01: The Markov Files"
+author:
+  - name: Cormac Monaghan
+    orcid: 0000-0001-9012-3060
+    url: https://c-monaghan.github.io/
+institute: Hamilton Institute, Maynooth University
+format: comic-revealjs
+---
+
+```{r}
+#| label: setup
+
+set.seed(4321)
+
+# Packages ---------------------------------------------------------------------
+library(ggplot2)
+library(colorspace)
+library(showtext)
+
+# Fonts ------------------------------------------------------------------------
+font_add_google("Bangers")
+
+showtext_auto(enable = TRUE)
+showtext_opts(dpi = 300)
+
+# Theme ------------------------------------------------------------------------
+theme_pres <- function() {
+  theme_minimal(base_family = "Bangers", base_size = 16) +
+    theme(
+      panel.grid.minor = element_blank(),
+      axis.title = element_text(size = rel(1), face = "bold"),
+      axis.text = element_text(size = rel(1))
+    )
+}
+
+# The data ---------------------------------------------------------------------
+hero_data <- tibble::tibble(
+  hours_trained = rnorm(10, mean = 7, sd = 2),
+  villains_defeated = 10 + 2 * hours_trained + rnorm(10, mean = 0, sd = 2)
+)
+
+# Reconstructing the crime scene
+fit <- glm(villains_defeated ~ hours_trained, data = hero_data)
+
+hero_data <- hero_data |> dplyr::mutate(preds = predict(fit))
+```
+
+# Issue 01: The Markov Files {.section}
+
+## The Markov Files {.panel}
+
+The world is always changing.
+
+- The weather shifts
+- Markets rise and fall
+- Health fades and recovers.
+
+At first glance, it looks like chaos.
+
+But hidden inside that chaos...
+
+are patterns.
+
+::: {.caption .fragment}
+Patterns we can model
+:::
+
+## The Hero {.panel}
+
+::: {layout-ncol=2 layout-valign="center"}
+
+::: {.fragment}
+![](files/images/markov_man.png)
+:::
+
+::: {.speech .fragment}
+I protect the system...
+one transition at a time.
+:::
+:::
+
+::: {.caption .fragment}
+His superpower lies in one simple rule ...
+:::
+
+## The Superpower {.panel}
+
+::: {.incremental}
+- Systems move between a finite number of states.
+- Let $X_t$ represent the state at time $t$.
+- Each state belongs to $S = \{1, 2, \dots, K\}$.
+- **The next state depends only on the current state.**
+:::
+
+<br>
+
+::: {.fragment .fade-up .callout-important title="Markov Man's Superpower"}
+$$
+P(X_{t+1} = j \; \vert \; X_t = i, X_{t-1} = i_{t-1}, \dots X_0 = i_0) = P(X_{t+1} = j \; \vert \; X_t = i)
+$$
+
+:::
+
+::: {.caption .fragment}
+No history. No memory. Only the present.
+:::
+
+## {.explosion}
+
+BUT WAIT!
+
+{{< bam "A WEAKNESS!" colour=red top=28% right=12% rotate=10 size=1.5em fragment=burst index=1 >}}
+
+{{< bam "RESIDUALS!" colour=yellow top=62% left=8% rotate=-14 size=1.6em fragment=burst index=2 >}}
+
+{{< bam "MODEL MISFIT!" colour=blue bottom=18% right=20% rotate=-6 size=1.2em fragment=pop index=3 >}}
+
+# Issue 02: Markov Man's Hidden Weakness {.section}
+
+## The Clues {.panel}
+
+In regression, the suspect leaves behind a trail.
+
+::: {.incremental}
+- **A fitted value**
+- **A residual**
+- **A clue**
+:::
+
+## Scene 1: The Evidence {.panel}
+
+```{r}
+#| label: fig-1
+#| fig-cap: "Raw evidence collected from the scene."
+
+hero_data |>
+  ggplot(aes(hours_trained, villains_defeated)) +
+  geom_point(size = 4) +
+  labs(
+    x = "Hours of training",
+    y = "Villains defeated"
+  ) +
+  theme_pres()
+```
+
+## Scene 2: The Suspects {.panel}
+
+```{r}
+#| label: fig-2
+#| fig-cap: "The prime suspect enters the frame."
+
+hero_data |>
+  ggplot(aes(hours_trained, villains_defeated)) +
+  geom_point(size = 4) +
+  geom_smooth(
+    formula = y ~ x,
+    method = "lm",
+    se = FALSE,
+    colour = ggokabeito::palette_okabe_ito(5)
+  ) +
+  labs(
+    x = "Hours of training",
+    y = "Villains defeated"
+  ) +
+  theme_pres()
+```
+
+## Scene 3: The Reconstruction {.panel}
+
+```{r}
+#| label: fig-3
+#| fig-cap: "The suspect gives their version of events"
+
+hero_data |>
+  ggplot(aes(hours_trained, villains_defeated)) +
+  geom_point(size = 4) +
+  geom_smooth(
+    formula = y ~ x,
+    method = "lm",
+    se = FALSE,
+    colour = ggokabeito::palette_okabe_ito(5)
+  ) +
+  geom_point(
+    aes(y = preds),
+    size = 3.5,
+    colour = ggokabeito::palette_okabe_ito(3)
+  ) +
+  labs(
+    x = "Hours of training",
+    y = "Villains defeated"
+  ) +
+  theme_pres()
+```
+
+## Scene 4: The Clues {.panel}
+
+```{r}
+#| label: fig-4
+#| fig-cap: "The inconsistencies begin to show"
+
+hero_data |>
+  ggplot(aes(hours_trained, villains_defeated)) +
+  geom_point(size = 4) +
+  geom_smooth(
+    formula = y ~ x,
+    method = "lm",
+    se = FALSE,
+    colour = ggokabeito::palette_okabe_ito(5)
+  ) +
+  geom_point(
+    aes(y = preds),
+    size = 3.5,
+    colour = ggokabeito::palette_okabe_ito(3)
+  ) +
+  geom_segment(
+    aes(
+      x = hours_trained,
+      xend = hours_trained,
+      y = villains_defeated,
+      yend = preds
+    ),
+    linewidth = 1.2,
+    linetype = "dashed"
+  ) +
+  labs(
+    x = "Hours of training",
+    y = "Villains defeated"
+  ) +
+  theme_pres()
+```
+
+## {.explosion}
+
+BUT WAIT!
+
+{{< bam "PLOT TWIST!" colour=yellow top=10% right=10% rotate=8 size=2.8em fragment=burst index=1 >}}
+{{< bam "NO RESIDUALS?!" colour=red bottom=18% left=15% rotate=-6 size=2.2em fragment=pop index=2 >}}
+
+## Markov Man hits a dead end {.panel}
+
+But Markov models **leave no such trail**.
+
+::: {.callout-note title="They predict probabilities"}
+$$
+P = \begin{bmatrix}
+P(A \rightarrow A) \quad P(A \rightarrow B) \\
+P(B \rightarrow A) \quad P(B \rightarrow B)
+\end{bmatrix} =
+\begin{bmatrix}
+0.6 \quad 0.4 \\
+0.7 \quad 0.3
+\end{bmatrix}
+$$
+:::
+
+::: {.thought .fragment}
+How do you compute residuals from probabilities?
+:::
+
+## The Alibi Check {.panel}
+
+```{r}
+#| label: fig-5
+#| fig-cap: "The transition matrix"
+transitions <- tibble::tribble(
+  ~From , ~To , ~Observed , ~Predicted ,
+  "A"   , "A" , 0.83      , 0.60       ,
+  "A"   , "B" , 0.17      , 0.40       ,
+  "B"   , "A" , 0.33      , 0.70       ,
+  "B"   , "B" , 0.66      , 0.30
+)
+
+transitions |>
+  tidyr::pivot_longer(
+    cols = c(Observed:Predicted),
+    names_to = "transition",
+    values_to = "value"
+  ) |>
+  ggplot(aes(x = To, y = From, fill = value)) +
+  geom_tile(colour = "white") +
+  geom_text(aes(label = paste0(value * 100, "%")), size = 5) +
+  scale_fill_continuous_sequential(palette = "OrYel") +
+  facet_wrap(
+    ~transition,
+    labeller = labeller(
+      transition = c(
+        "Observed" = "Witness Testimony",
+        "Predicted" = "Suspect Alibi"
+      )
+    )
+  ) +
+  guides(fill = "none") +
+  theme_pres() +
+  theme(panel.grid = element_blank())
+```
+
+::: {.caption .fragment}
+Do the stories match?
+:::
+
+## Markov Man {.speech}
+
+If residuals fail us...
+
+we need to find another way.
+
+# Issue 03: Markov Man's Investigation {.section}
+
+To solve the mystery...
+
+Markov Man ran thousands of simulated investigations.
+
+... specifically 54,000!
+
+## The Reconstruction {.panel}
+
+::: {.incremental}
+- $10{,}000$ individuals investigated
+- $3 \rightarrow 5$ waves observed
+- $5$ covariates generated
+- $3 \rightarrow 5$ states examined
+- $3$ **suspects** tested
+:::
+
+:::{.fragment .fade-up .callout-tip title="The Suspects"}
+
+**Base model**: $y \sim x_1 + x_2 + x_3$
+
+**Additive model**: $y \sim x_1 + x_2 + x_3 + y_{t-1}$
+
+**Multiplicative Model**: $y \sim (x_1 + x_2 + x_3) \times y_{t-1}$
+
+:::
+
+## Evidence Processing {.panel}
+
+For every fitted model:
+
+:::{.incremental}
+- First, Markov Man record what actually happened: $P$
+- Next, Markov Man reconstruct what the model expected: $\hat{P}$
+- Finally, Markov Man compare the two stories: $P \longleftrightarrow \hat{P}$
+:::
+
+<br>
+
+::: {.fragment .fade-up .narration}
+The greater the difference, the greater the suspicion.
+:::
+
+## Detective Gadgets {.panel}
+
+Markov Man assembled his specialist detective squad:
+
+::: {layout-ncol=2 layout-valign="center"}
+::: {.fragment}
+- Frobenius Norm
+- Manhattan Distance
+- Maximum Absolute Error
+- Root Mean Squared
+- Correlation Dissimilarity
+- Kullback-Leibler divergence
+:::
+
+::: {.fragment}
+As well as some of his most **trusted veterans**
+
+::: {.callout-tip icon="false" title="The Veteran Detectives"}
+**AIC and BIC**
+:::
+:::
+:::
+
+# Issue 04: Markov Man cracks the case {.section}
+
+## The Verdict {.panel}
+
+::: {.panel-tabset tabset-skip-pdf-clone="true"}
+
+### 3 States {.active}
+
+![](files/images/3_states.png)
+
+### 4 States
+
+![](files/images/4_states.png)
+
+### 5 States
+
+![](files/images/5_states.png)
+:::
+
+## Case closed {.panel}
+
+The investigation revealed:
+
+::: {.incremental}
+- For smaller sample sizes, **Manhattan Distance** and **Mean Absolute
+  Difference** were the strongest detectives.
+- In some cases, they **outperformed** the veteran detectives.
+- However, when there was a **great number of states**, the detectives were
+  **all confused**.
+:::
+
+::: {.narration .fragment}
+For small samples, we have a couple of good detectives!
+:::
+
+## Press release {.speech}
+
+"When sample sizes are small and states are few, Manhattan Distance is your
+best detective!"

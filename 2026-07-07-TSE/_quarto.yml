@@ -1,0 +1,8 @@
+project:
+  output-dir: ../docs
+
+  preview:
+    port: 6532
+    browser: true
+    watch-inputs: true
+    navigate: true
