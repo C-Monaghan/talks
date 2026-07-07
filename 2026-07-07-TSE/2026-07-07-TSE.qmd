@@ -318,9 +318,9 @@ Markov Man ran thousands of simulated investigations.
 
 ::: {.incremental}
 - $10{,}000$ individuals investigated
-- $3 \rightarrow 5$ waves observed
 - $5$ covariates generated
 - $3 \rightarrow 5$ states examined
+- $4$ different sample sizes tested
 - $3$ **suspects** tested
 :::
 
